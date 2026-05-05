@@ -3,698 +3,1099 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<title>HYDRO WAR LAB - Battle Territory</title>
+<title>HYDRO WAR RTS</title>
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  color:white;
-  background:
-    radial-gradient(circle at top,#123d66 0%,transparent 38%),
-    linear-gradient(160deg,#030713,#06182d,#02040a);
-  min-height:100vh;
-}
-.app{max-width:1180px;margin:auto;padding:12px 12px 90px}
-.top{
-  position:sticky;top:0;z-index:30;
-  background:rgba(3,7,19,.82);
-  backdrop-filter:blur(14px);
-  padding:12px 0;
-  display:flex;justify-content:space-between;align-items:center;gap:10px
-}
-.logo{display:flex;align-items:center;gap:10px}
-.logoBox{
-  width:50px;height:50px;border-radius:18px;
-  display:grid;place-items:center;font-size:27px;
-  background:linear-gradient(135deg,#21f6ff55,#8b5cff55);
-  border:1px solid #ffffff25;
-  box-shadow:0 0 28px #21f6ff55
-}
-h1{margin:0;font-size:20px}
-.sub{font-size:12px;color:#a8c6d8;margin-top:3px}
-.pill{
-  padding:9px 12px;border-radius:999px;
-  background:#ffffff12;border:1px solid #ffffff24;
-  font-size:12px;white-space:nowrap
-}
-.res{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:8px;margin:10px 0 12px
-}
-.box{
-  background:#ffffff10;
-  border:1px solid #ffffff20;
-  border-radius:18px;
-  padding:10px;
-  box-shadow:0 12px 30px #00000044
-}
-.box small{display:block;color:#a8c6d8;font-size:11px}
-.box b{font-size:18px}
-.layout{
-  display:grid;
-  grid-template-columns:1.35fr .65fr;
-  gap:12px
-}
-.card{
-  background:#ffffff10;
-  border:1px solid #ffffff20;
-  border-radius:25px;
-  box-shadow:0 24px 60px #00000055;
-  overflow:hidden
-}
-.cardHead{padding:14px 14px 0}
-.cardHead h2{margin:0;font-size:19px}
-.cardHead p{margin:5px 0 0;color:#a8c6d8;font-size:12px;line-height:1.35}
-.battlefield{
-  position:relative;
-  height:560px;
-  margin:14px;
-  border-radius:25px;
+  color:#eaf7ff;
+  background:#07111f;
   overflow:hidden;
-  border:1px solid #35f6ff40;
+}
+#app{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
   background:
-    linear-gradient(#ffffff07 1px,transparent 1px),
-    linear-gradient(90deg,#ffffff07 1px,transparent 1px),
-    linear-gradient(90deg,#06325a 0%,#071426 48%,#35101b 100%);
-  background-size:34px 34px,34px 34px,auto;
+    radial-gradient(circle at 20% 0%,rgba(0,255,255,.2),transparent 25%),
+    radial-gradient(circle at 90% 20%,rgba(255,50,100,.18),transparent 25%),
+    linear-gradient(160deg,#030713,#07182b,#02040a);
 }
-.zone{
-  position:absolute;top:0;bottom:0;width:50%;
-  display:flex;align-items:flex-start;justify-content:center;
-  padding-top:12px;
-  font-size:12px;color:#bdefff;
-  pointer-events:none
+.topbar{
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 10px;
+  background:rgba(2,8,18,.88);
+  border-bottom:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
 }
-.zone.enemy{right:0;color:#ffd4dc}
-.zone.ally{left:0}
-.midLine{
-  position:absolute;left:50%;top:0;bottom:0;width:2px;
-  background:linear-gradient(transparent,#ffffff55,transparent)
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
 }
-.base{
-  position:absolute;z-index:5;
-  top:50%;transform:translateY(-50%);
-  width:120px;height:150px;border-radius:28px;
-  display:grid;place-items:center;text-align:center;
-  border:1px solid #ffffff30;
-  box-shadow:0 0 38px #00000066
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#00eaff55,#8b5cff55);
+  border:1px solid #ffffff22;
+  font-size:23px;
+  box-shadow:0 0 22px #00eaff55;
 }
-.allyBase{
-  left:18px;
-  background:radial-gradient(circle,#35f6ff55,#183d6d);
-  box-shadow:0 0 45px #35f6ff66
+h1{
+  margin:0;
+  font-size:17px;
+  line-height:1.1;
 }
-.enemyBase{
-  right:18px;
-  background:radial-gradient(circle,#ff335f66,#4a111d);
-  box-shadow:0 0 45px #ff335f66
+.sub{
+  color:#9fb8c9;
+  font-size:11px;
+  margin-top:2px;
 }
-.base strong{display:block;font-size:42px}
-.base span{font-size:12px}
-.lane{
-  position:absolute;left:0;right:0;height:1px;
-  border-top:1px dashed #ffffff22
+.stats{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  max-width:62vw;
 }
-.l1{top:28%}.l2{top:50%}.l3{top:72%}
-.unit{
-  position:absolute;z-index:10;
-  width:48px;height:48px;border-radius:15px;
-  display:grid;place-items:center;
-  transform:translate(-50%,-50%);
-  border:1px solid #ffffff33;
-  box-shadow:0 0 20px #00000077;
-  transition:transform .05s linear;
+.stat{
+  white-space:nowrap;
+  padding:7px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.14);
+  font-size:12px;
 }
-.unit .emoji{font-size:27px;line-height:1}
-.allyUnit{
-  background:linear-gradient(135deg,#35f6ff77,#4d7cff55);
-  box-shadow:0 0 22px #35f6ff77
+.main{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 330px;
+  gap:0;
+  min-height:0;
 }
-.enemyUnit{
-  background:linear-gradient(135deg,#ff335f77,#ff9b2f55);
-  box-shadow:0 0 22px #ff335f77
+.gameWrap{
+  position:relative;
+  min-width:0;
+  min-height:0;
 }
-.hp{
-  position:absolute;left:5px;right:5px;bottom:3px;height:5px;
-  border-radius:99px;background:#00000077;overflow:hidden
+#game{
+  width:100%;
+  height:100%;
+  display:block;
+  background:#0d2517;
+  touch-action:none;
 }
-.hp span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#18ff9a,#35f6ff)}
-.enemyUnit .hp span{background:linear-gradient(90deg,#ff335f,#ffd166)}
-.shot{
-  position:absolute;z-index:20;height:4px;border-radius:99px;
-  background:linear-gradient(90deg,transparent,#35f6ff,#fff,#ff335f,transparent);
-  box-shadow:0 0 16px #35f6ff;
-  transform-origin:left center;
-  pointer-events:none;
-  animation:fadeShot .25s linear forwards
+.side{
+  background:rgba(2,8,18,.9);
+  border-left:1px solid rgba(255,255,255,.12);
+  padding:10px;
+  overflow-y:auto;
 }
-@keyframes fadeShot{to{opacity:0}}
-.panel{padding:14px}
+.panelTitle{
+  margin:0 0 8px;
+  font-size:16px;
+}
 .btn{
   width:100%;
   border:0;
-  border-radius:17px;
+  border-radius:14px;
   margin-bottom:8px;
-  padding:13px;
+  padding:11px;
   color:white;
   font-weight:800;
   text-align:left;
   background:linear-gradient(135deg,#4d7cff,#8b5cff);
-  box-shadow:0 12px 26px #00000044
+  box-shadow:0 10px 22px rgba(0,0,0,.3);
 }
 .btn:active{transform:scale(.98)}
-.btn small{display:block;color:#ffffffbb;font-weight:400;margin-top:4px;line-height:1.25}
+.btn small{
+  display:block;
+  margin-top:4px;
+  color:rgba(255,255,255,.72);
+  font-weight:400;
+  line-height:1.25;
+}
 .green{background:linear-gradient(135deg,#00c982,#00aaff)}
 .red{background:linear-gradient(135deg,#ff335f,#ff9100)}
 .dark{background:linear-gradient(135deg,#334155,#111827)}
-.bar{
-  width:100%;height:12px;border-radius:99px;
-  background:#ffffff18;overflow:hidden;margin-top:8px
-}
-.bar span{
-  display:block;height:100%;width:100%;
-  background:linear-gradient(90deg,#ff335f,#ffd166);
-  transition:.2s
-}
 .log{
-  margin-top:10px;height:165px;overflow:auto;
-  background:#00000035;
-  border:1px solid #ffffff18;
-  border-radius:17px;
-  padding:9px;
-  font-size:12px;color:#d9f8ff
+  height:155px;
+  overflow:auto;
+  border-radius:14px;
+  padding:8px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.12);
+  color:#d9f8ff;
+  font-size:12px;
 }
-.log div{padding:5px 0;border-bottom:1px dashed #ffffff14}
+.log div{
+  padding:5px 0;
+  border-bottom:1px dashed rgba(255,255,255,.1);
+}
+.tip{
+  margin:8px 0;
+  padding:9px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  color:#bad4e3;
+  font-size:12px;
+  line-height:1.35;
+}
 .toast{
-  position:fixed;left:50%;bottom:25px;
-  transform:translateX(-50%) translateY(20px);
-  background:#06111f;
-  border:1px solid #35f6ff88;
-  padding:12px 16px;
-  border-radius:999px;
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%) translateY(16px);
   opacity:0;
   transition:.2s;
-  z-index:100;
-  white-space:nowrap
+  background:#06111f;
+  border:1px solid #35f6ff88;
+  border-radius:999px;
+  padding:11px 15px;
+  color:white;
+  z-index:50;
+  white-space:nowrap;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:880px){
-  .layout{grid-template-columns:1fr}
-  .res{grid-template-columns:repeat(2,1fr)}
-  .battlefield{height:620px}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
-@media(max-width:520px){
-  h1{font-size:17px}
-  .pill{display:none}
-  .battlefield{height:640px;margin:10px}
-  .base{width:92px;height:120px;border-radius:23px}
-  .base strong{font-size:32px}
-  .unit{width:42px;height:42px}
-  .unit .emoji{font-size:24px}
+.mobileBar{
+  display:none;
+}
+@media(max-width:850px){
+  .main{
+    grid-template-columns:1fr;
+  }
+  .side{
+    display:none;
+  }
+  .stats{
+    max-width:58vw;
+  }
+  .mobileBar{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+    padding:7px;
+    background:rgba(2,8,18,.94);
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+  .mobileBar button{
+    border:0;
+    border-radius:13px;
+    padding:9px 4px;
+    color:white;
+    background:rgba(255,255,255,.1);
+    font-size:11px;
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="app">
-  <div class="top">
-    <div class="logo">
-      <div class="logoBox">⚡</div>
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">⚡</div>
       <div>
-        <h1>HYDRO WAR LAB</h1>
-        <div class="sub">Kirim pasukan, tank, dan artileri fiksi ke wilayah musuh</div>
-      </div>
-    </div>
-    <div class="pill">Wilayah <b id="territoryTop">1</b> • Power <b id="powerTop">0</b></div>
-  </div>
-
-  <div class="res">
-    <div class="box"><small>⚡ Energi</small><b id="energy">0</b></div>
-    <div class="box"><small>🔩 Alloy</small><b id="alloy">0</b></div>
-    <div class="box"><small>💰 Credit</small><b id="credit">0</b></div>
-    <div class="box"><small>🏰 HP Markas</small><b id="baseHp">0</b></div>
-    <div class="box"><small>👹 HP Musuh</small><b id="enemyHp">0</b></div>
-    <div class="box"><small>🛡️ Power</small><b id="power">0</b></div>
-  </div>
-
-  <div class="layout">
-    <div class="card">
-      <div class="cardHead">
-        <h2>🗺️ Peta Perang Wilayah</h2>
-        <p>Pasukan kamu bergerak dari kiri ke kanan. Musuh bergerak dari kanan ke kiri.</p>
-      </div>
-
-      <div class="battlefield" id="field">
-        <div class="zone ally">WILAYAH KAMU</div>
-        <div class="zone enemy">WILAYAH MUSUH</div>
-        <div class="midLine"></div>
-        <div class="lane l1"></div>
-        <div class="lane l2"></div>
-        <div class="lane l3"></div>
-
-        <div class="base allyBase">
-          <div>
-            <strong>🏰</strong>
-            <span>Markas Kamu</span>
-          </div>
-        </div>
-
-        <div class="base enemyBase">
-          <div>
-            <strong>👹</strong>
-            <span>Markas Musuh</span>
-          </div>
-        </div>
+        <h1>HYDRO WAR RTS</h1>
+        <div class="sub">Strategi perang markas sci-fi</div>
       </div>
     </div>
 
-    <div class="card panel">
-      <div class="box">
-        <small>HP Markas Musuh</small>
-        <div class="bar"><span id="enemyHpBar"></span></div>
+    <div class="stats">
+      <div class="stat">💰 <b id="money">0</b></div>
+      <div class="stat">⚡ <b id="energy">0/0</b></div>
+      <div class="stat">👥 <b id="pop">0/0</b></div>
+      <div class="stat">🏰 <b id="baseHp">0</b></div>
+      <div class="stat">👹 <b id="enemyHp">0</b></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="gameWrap">
+      <canvas id="game"></canvas>
+    </div>
+
+    <div class="side">
+      <h2 class="panelTitle">🎮 Command Center</h2>
+
+      <button class="btn green" onclick="buildUnit('soldier')">🧍 Buat Pasukan
+        <small>Murah dan cepat. Cost: 60 uang, 1 energi, 1 populasi.</small>
+      </button>
+
+      <button class="btn green" onclick="buildUnit('tank')">🚙 Buat Tank Sci-Fi
+        <small>Lebih kuat dan tahan lama. Cost: 160 uang, 2 energi, 2 populasi.</small>
+      </button>
+
+      <button class="btn green" onclick="buildUnit('artillery')">🎯 Buat Artileri Fiksi
+        <small>Serangan jarak jauh. Cost: 240 uang, 3 energi, 3 populasi.</small>
+      </button>
+
+      <button class="btn" onclick="selectAll()">✅ Pilih Semua Unit</button>
+      <button class="btn red" onclick="attackEnemyBase()">⚔️ Serang Markas Musuh</button>
+      <button class="btn" onclick="centerCamera('home')">🏰 Lihat Markas Kita</button>
+      <button class="btn" onclick="centerCamera('enemy')">👹 Lihat Wilayah Musuh</button>
+      <button class="btn dark" onclick="saveGame(true)">💾 Simpan</button>
+      <button class="btn dark" onclick="resetGame()">🗑️ Reset</button>
+
+      <div class="tip">
+        Cara main: tekan unit untuk memilih, lalu tekan tanah untuk menyuruh unit bergerak. Tekan musuh untuk menyerang.
       </div>
-
-      <button class="btn" onclick="collect()">📦 Kumpulkan Resource
-        <small>Tambah energi, alloy, dan credit.</small>
-      </button>
-
-      <button class="btn green" onclick="sendUnit('soldier')">🧍 Kirim Pasukan
-        <small>Murah dan cepat. Cocok untuk menekan musuh.</small>
-      </button>
-
-      <button class="btn green" onclick="sendUnit('tank')">🚙 Kirim Tank Sci-Fi
-        <small>Lebih kuat, HP besar, jalan lebih lambat.</small>
-      </button>
-
-      <button class="btn green" onclick="sendUnit('artillery')">🎯 Kirim Artileri Fiksi
-        <small>Menyerang dari jarak jauh di tengah arena.</small>
-      </button>
-
-      <button class="btn red" onclick="spawnEnemy()">👾 Pancing Musuh
-        <small>Munculkan pasukan musuh lebih cepat.</small>
-      </button>
-
-      <button class="btn" onclick="repairBase()">🛠️ Perbaiki Markas
-        <small>Memulihkan HP markas kamu.</small>
-      </button>
-
-      <button class="btn dark" onclick="saveGame(true)">💾 Simpan Game</button>
-      <button class="btn dark" onclick="resetGame()">🗑️ Reset Game</button>
 
       <div class="log" id="log"></div>
     </div>
   </div>
+
+  <div class="mobileBar">
+    <button onclick="buildUnit('soldier')">🧍<br>Pasukan</button>
+    <button onclick="buildUnit('tank')">🚙<br>Tank</button>
+    <button onclick="buildUnit('artillery')">🎯<br>Artileri</button>
+    <button onclick="selectAll()">✅<br>Semua</button>
+    <button onclick="attackEnemyBase()">⚔️<br>Serang</button>
+  </div>
 </div>
 
-<div class="toast" id="toast">Info</div>
+<div id="toast" class="toast">Info</div>
 
 <script>
-const SAVE_KEY = "hydro_territory_war_v1";
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-const unitData = {
+const WORLD = { w: 1800, h: 1050 };
+const SAVE_KEY = "hydro_war_rts_v1";
+
+const unitStats = {
   soldier: {
-    name:"Pasukan",
-    emoji:"🧍",
-    hp:50,
-    dmg:10,
-    speed:5.2,
-    cooldown:.55,
-    cost:{energy:8, alloy:18, credit:45}
+    name: "Pasukan",
+    emoji: "🧍",
+    hp: 70,
+    dmg: 8,
+    range: 85,
+    speed: 90,
+    cd: .75,
+    costMoney: 60,
+    energy: 1,
+    pop: 1
   },
   tank: {
-    name:"Tank Sci-Fi",
-    emoji:"🚙",
-    hp:140,
-    dmg:26,
-    speed:3.1,
-    cooldown:.8,
-    cost:{energy:45, alloy:80, credit:120}
+    name: "Tank Sci-Fi",
+    emoji: "🚙",
+    hp: 190,
+    dmg: 22,
+    range: 115,
+    speed: 55,
+    cd: 1.05,
+    costMoney: 160,
+    energy: 2,
+    pop: 2
   },
   artillery: {
-    name:"Artileri Fiksi",
-    emoji:"🎯",
-    hp:75,
-    dmg:36,
-    speed:2.2,
-    cooldown:1.25,
-    cost:{energy:70, alloy:95, credit:150}
+    name: "Artileri Fiksi",
+    emoji: "🎯",
+    hp: 115,
+    dmg: 42,
+    range: 230,
+    speed: 42,
+    cd: 1.7,
+    costMoney: 240,
+    energy: 3,
+    pop: 3
   },
-  enemy: {
-    name:"Drone Musuh",
-    emoji:"👾",
-    hp:65,
-    dmg:13,
-    speed:3.5,
-    cooldown:.7
+  enemySoldier: {
+    name: "Drone Musuh",
+    emoji: "👾",
+    hp: 82,
+    dmg: 9,
+    range: 85,
+    speed: 73,
+    cd: .8,
+    energy: 0,
+    pop: 0
   },
-  enemyHeavy: {
-    name:"Robot Musuh",
-    emoji:"🤖",
-    hp:120,
-    dmg:24,
-    speed:2.8,
-    cooldown:.85
+  enemyTank: {
+    name: "Robot Berat",
+    emoji: "🤖",
+    hp: 170,
+    dmg: 20,
+    range: 110,
+    speed: 50,
+    cd: 1.05,
+    energy: 0,
+    pop: 0
   }
 };
 
-let game = loadGame() || {
-  energy:350,
-  alloy:300,
-  credit:350,
-  baseHp:600,
-  baseMaxHp:600,
-  enemyHp:700,
-  enemyMaxHp:700,
-  territory:1,
-  enemyTimer:0
+let state = loadSave() || {
+  money: 420,
+  energyCap: 12,
+  popCap: 18,
+  playerBaseHp: 1200,
+  enemyBaseHp: 1400,
+  enemyMaxHp: 1400,
+  territory: 1
 };
 
+let camera = { x: 0, y: 0, zoom: 1 };
 let units = [];
-let idCounter = 1;
-let lastTime = performance.now();
+let enemies = [];
+let projectiles = [];
+let selectedIds = [];
+let idSeq = 1;
+let last = performance.now();
+let enemyTimer = 0;
+let incomeTimer = 0;
 
-function $(id){return document.getElementById(id)}
-function num(v){return Math.floor(v).toLocaleString("id-ID")}
-function laneY(lane){return [28,50,72][lane]}
-function randLane(){return Math.floor(Math.random()*3)}
+const playerBase = { x: 210, y: 750, w: 150, h: 130 };
+const enemyBase = { x: 1450, y: 260, w: 160, h: 145 };
+
+const decor = [];
+for(let i=0;i<70;i++){
+  decor.push({
+    type: Math.random() < .65 ? "tree" : "rock",
+    x: 80 + Math.random() * (WORLD.w - 160),
+    y: 90 + Math.random() * (WORLD.h - 180),
+    s: 10 + Math.random() * 18
+  });
+}
+
+function resize(){
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.max(1, Math.floor(rect.width));
+  canvas.height = Math.max(1, Math.floor(rect.height));
+  camera.zoom = Math.max(.55, Math.min(1.05, canvas.width / 950));
+  clampCamera();
+}
+window.addEventListener("resize", resize);
+
+function clampCamera(){
+  const vw = canvas.width / camera.zoom;
+  const vh = canvas.height / camera.zoom;
+  camera.x = Math.max(0, Math.min(WORLD.w - vw, camera.x));
+  camera.y = Math.max(0, Math.min(WORLD.h - vh, camera.y));
+}
 
 function toast(text){
-  $("toast").textContent=text;
-  $("toast").classList.add("show");
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.classList.add("show");
   clearTimeout(window.toastTimer);
-  window.toastTimer=setTimeout(()=>$("toast").classList.remove("show"),1500);
+  window.toastTimer = setTimeout(()=>t.classList.remove("show"), 1500);
 }
 
 function log(text){
-  const d=document.createElement("div");
-  d.textContent="• "+text;
-  $("log").prepend(d);
-  while($("log").children.length>40){
-    $("log").removeChild($("log").lastChild);
-  }
+  const box = document.getElementById("log");
+  if(!box) return;
+  const d = document.createElement("div");
+  d.textContent = "• " + text;
+  box.prepend(d);
+  while(box.children.length > 40) box.removeChild(box.lastChild);
 }
 
-function power(){
-  return Math.floor(
-    game.baseHp*.18 +
-    units.filter(u=>u.side==="ally").reduce((a,u)=>a+u.hp+u.dmg*4,0)
-  );
+function usedEnergy(){
+  return units.reduce((a,u)=>a + (unitStats[u.type].energy || 0), 0);
+}
+
+function usedPop(){
+  return units.reduce((a,u)=>a + (unitStats[u.type].pop || 0), 0);
 }
 
 function updateUI(){
-  $("energy").textContent=num(game.energy);
-  $("alloy").textContent=num(game.alloy);
-  $("credit").textContent=num(game.credit);
-  $("baseHp").textContent=num(game.baseHp);
-  $("enemyHp").textContent=num(game.enemyHp);
-  $("territoryTop").textContent=game.territory;
-  $("power").textContent=num(power());
-  $("powerTop").textContent=num(power());
-
-  const pct=Math.max(0,game.enemyHp/game.enemyMaxHp*100);
-  $("enemyHpBar").style.width=pct+"%";
+  document.getElementById("money").textContent = Math.floor(state.money);
+  document.getElementById("energy").textContent = usedEnergy() + "/" + state.energyCap;
+  document.getElementById("pop").textContent = usedPop() + "/" + state.popCap;
+  document.getElementById("baseHp").textContent = Math.max(0, Math.floor(state.playerBaseHp));
+  document.getElementById("enemyHp").textContent = Math.max(0, Math.floor(state.enemyBaseHp));
 }
 
-function spend(cost){
-  for(const k in cost){
-    if(game[k] < cost[k]){
-      toast("Resource kurang");
-      return false;
-    }
+function buildUnit(type){
+  const s = unitStats[type];
+
+  if(state.money < s.costMoney){
+    toast("Uang kurang");
+    return;
   }
-  for(const k in cost){
-    game[k]-=cost[k];
+
+  if(usedEnergy() + s.energy > state.energyCap){
+    toast("Energi penuh. Butuh pembangkit lagi nanti.");
+    return;
   }
-  return true;
-}
 
-function collect(){
-  const e=90+game.territory*8;
-  const a=75+game.territory*7;
-  const c=80+game.territory*9;
-  game.energy+=e;
-  game.alloy+=a;
-  game.credit+=c;
-  log("Resource masuk: +" + e + " energi, +" + a + " alloy, +" + c + " credit.");
-  updateUI();
-}
+  if(usedPop() + s.pop > state.popCap){
+    toast("Populasi penuh");
+    return;
+  }
 
-function createUnit(type, side){
-  const data = side==="ally" ? unitData[type] : unitData[type];
-  const lane = randLane();
-  const unit = {
-    id:idCounter++,
-    type,
-    side,
-    lane,
-    x:side==="ally"?10:90,
-    hp:data.hp,
-    maxHp:data.hp,
-    dmg:data.dmg,
-    speed:data.speed,
-    cooldown:0,
-    attackDelay:data.cooldown,
-    emoji:data.emoji,
-    name:data.name,
-    el:null
-  };
+  state.money -= s.costMoney;
 
-  const el=document.createElement("div");
-  el.className="unit " + (side==="ally" ? "allyUnit" : "enemyUnit");
-  el.innerHTML=`<div class="emoji">${data.emoji}</div><div class="hp"><span></span></div>`;
-  $("field").appendChild(el);
-  unit.el=el;
+  const spawnX = playerBase.x + playerBase.w + 40 + Math.random() * 30;
+  const spawnY = playerBase.y + playerBase.h / 2 + (Math.random() - .5) * 80;
+
+  const unit = makeUnit(type, "player", spawnX, spawnY);
   units.push(unit);
-  updateUnitEl(unit);
+  selectedIds = [unit.id];
+
+  log(s.name + " dibuat di markas.");
+  updateUI();
 }
 
-function sendUnit(type){
-  const cost=unitData[type].cost;
-  if(!spend(cost)) return;
-  createUnit(type,"ally");
-  log("Kamu mengirim " + unitData[type].name + " menuju wilayah musuh.");
-  updateUI();
+function makeUnit(type, team, x, y){
+  const s = unitStats[type];
+
+  return {
+    id: idSeq++,
+    type,
+    team,
+    x,
+    y,
+    hp: s.hp,
+    maxHp: s.hp,
+    targetId: null,
+    targetBase: null,
+    dest: null,
+    cd: 0
+  };
 }
 
 function spawnEnemy(){
-  const heavy = Math.random() < Math.min(.45, game.territory*.04);
-  createUnit(heavy ? "enemyHeavy" : "enemy", "enemy");
-  log((heavy ? "Robot Musuh" : "Drone Musuh") + " muncul dari wilayah musuh.");
+  const heavy = Math.random() < Math.min(.45, state.territory * .05);
+  const type = heavy ? "enemyTank" : "enemySoldier";
+
+  const x = enemyBase.x - 40 - Math.random() * 40;
+  const y = enemyBase.y + enemyBase.h / 2 + (Math.random() - .5) * 90;
+
+  const e = makeUnit(type, "enemy", x, y);
+  e.targetBase = "player";
+  enemies.push(e);
+
+  log((heavy ? "Robot berat musuh" : "Drone musuh") + " keluar dari wilayah musuh.");
 }
 
-function repairBase(){
-  if(!spend({energy:80, alloy:70, credit:60})) return;
-  const heal=160;
-  game.baseHp=Math.min(game.baseMaxHp,game.baseHp+heal);
-  log("Markas diperbaiki +" + heal + " HP.");
-  updateUI();
+function selectAll(){
+  selectedIds = units.map(u=>u.id);
+  toast("Semua unit dipilih");
 }
 
-function updateUnitEl(u){
-  if(!u.el) return;
-  u.el.style.left=u.x+"%";
-  u.el.style.top=laneY(u.lane)+"%";
-  const hpPct=Math.max(0,u.hp/u.maxHp*100);
-  u.el.querySelector(".hp span").style.width=hpPct+"%";
+function attackEnemyBase(){
+  if(units.length === 0){
+    toast("Belum ada unit");
+    return;
+  }
+
+  selectedIds = units.map(u=>u.id);
+  for(const u of units){
+    u.targetBase = "enemy";
+    u.targetId = null;
+    u.dest = null;
+  }
+
+  toast("Semua unit menyerang markas musuh");
+  log("Komandan mengirim semua unit ke wilayah musuh.");
 }
 
-function findTarget(u, range){
-  let best=null;
-  let bestDist=999;
-  for(const t of units){
-    if(t.side===u.side) continue;
-    if(t.lane!==u.lane) continue;
-    const d=Math.abs(t.x-u.x);
-    if(d<bestDist && d<=range){
-      best=t;
-      bestDist=d;
+function centerCamera(where){
+  if(where === "enemy"){
+    camera.x = enemyBase.x - canvas.width / camera.zoom / 2;
+    camera.y = enemyBase.y - canvas.height / camera.zoom / 2;
+  }else{
+    camera.x = playerBase.x - canvas.width / camera.zoom / 2;
+    camera.y = playerBase.y - canvas.height / camera.zoom / 2;
+  }
+  clampCamera();
+}
+
+function dist(a,b){
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  return Math.sqrt(dx*dx + dy*dy);
+}
+
+function moveToward(u, target, dt){
+  const dx = target.x - u.x;
+  const dy = target.y - u.y;
+  const d = Math.sqrt(dx*dx + dy*dy);
+
+  if(d < 4) return true;
+
+  const s = unitStats[u.type].speed;
+  u.x += dx / d * s * dt;
+  u.y += dy / d * s * dt;
+  return false;
+}
+
+function nearestEnemy(u, list, range){
+  let best = null;
+  let bestD = 999999;
+
+  for(const e of list){
+    const d = dist(u,e);
+    if(d < bestD && d <= range){
+      best = e;
+      bestD = d;
     }
   }
   return best;
 }
 
-function showShot(x1,y1,x2,y2){
-  const field=$("field");
-  const rect=field.getBoundingClientRect();
-
-  const sx=rect.width*x1/100;
-  const sy=rect.height*y1/100;
-  const ex=rect.width*x2/100;
-  const ey=rect.height*y2/100;
-
-  const dx=ex-sx;
-  const dy=ey-sy;
-  const len=Math.sqrt(dx*dx+dy*dy);
-  const angle=Math.atan2(dy,dx)*180/Math.PI;
-
-  const s=document.createElement("div");
-  s.className="shot";
-  s.style.left=sx+"px";
-  s.style.top=sy+"px";
-  s.style.width=len+"px";
-  s.style.transform="rotate("+angle+"deg)";
-  field.appendChild(s);
-
-  setTimeout(()=>s.remove(),260);
+function baseCenter(base){
+  return { x: base.x + base.w/2, y: base.y + base.h/2 };
 }
 
-function damageEnemyBase(amount, lane, fromX){
-  game.enemyHp-=amount;
-  showShot(fromX,laneY(lane),93,50);
+function attack(attacker, target){
+  const s = unitStats[attacker.type];
+  if(attacker.cd > 0) return;
 
-  if(game.enemyHp<=0){
-    winTerritory();
-  }
+  attacker.cd = s.cd;
+  target.hp -= s.dmg;
+
+  projectiles.push({
+    x: attacker.x,
+    y: attacker.y,
+    tx: target.x,
+    ty: target.y,
+    life: .18,
+    team: attacker.team
+  });
 }
 
-function damageAllyBase(amount, lane, fromX){
-  game.baseHp-=amount;
-  showShot(fromX,laneY(lane),7,50);
+function attackBase(attacker, which){
+  const s = unitStats[attacker.type];
+  if(attacker.cd > 0) return;
 
-  if(game.baseHp<=0){
-    loseBase();
+  attacker.cd = s.cd;
+
+  const target = which === "enemy" ? baseCenter(enemyBase) : baseCenter(playerBase);
+
+  projectiles.push({
+    x: attacker.x,
+    y: attacker.y,
+    tx: target.x,
+    ty: target.y,
+    life: .18,
+    team: attacker.team
+  });
+
+  if(which === "enemy"){
+    state.enemyBaseHp -= s.dmg;
+    if(state.enemyBaseHp <= 0) winTerritory();
+  }else{
+    state.playerBaseHp -= s.dmg;
+    if(state.playerBaseHp <= 0) loseGame();
   }
 }
 
 function winTerritory(){
-  game.enemyHp=0;
+  toast("Wilayah musuh direbut!");
+  log("Markas musuh hancur. Wilayah baru berhasil direbut.");
 
-  const rewardE=350+game.territory*90;
-  const rewardA=300+game.territory*80;
-  const rewardC=280+game.territory*85;
+  state.territory++;
+  state.money += 500 + state.territory * 120;
+  state.energyCap += 2;
+  state.popCap += 3;
+  state.enemyMaxHp = 1400 + state.territory * 420;
+  state.enemyBaseHp = state.enemyMaxHp;
 
-  game.energy+=rewardE;
-  game.alloy+=rewardA;
-  game.credit+=rewardC;
-  game.baseHp=Math.min(game.baseMaxHp,game.baseHp+180);
+  enemies = [];
+  projectiles = [];
 
-  log("Wilayah musuh berhasil direbut! Hadiah besar diterima.");
-  toast("Wilayah direbut!");
-
-  game.territory++;
-  game.enemyMaxHp=700+game.territory*260;
-  game.enemyHp=game.enemyMaxHp;
-
-  clearAllUnits();
-  updateUI();
+  centerCamera("home");
+  saveGame(false);
 }
 
-function loseBase(){
-  toast("Markas rusak!");
-  log("Markas kamu hancur sebagian. Musuh mundur, tapi resource berkurang.");
+function loseGame(){
+  toast("Markas kamu rusak berat!");
+  log("Markas kamu dihancurkan. Sistem memperbaiki sebagian markas.");
 
-  game.baseHp=220;
-  game.energy=Math.max(0,game.energy-200);
-  game.alloy=Math.max(0,game.alloy-150);
-  game.credit=Math.max(0,game.credit-150);
-
-  clearAllUnits();
-  updateUI();
+  state.playerBaseHp = 500;
+  state.money = Math.max(100, state.money - 300);
+  units = [];
+  enemies = [];
+  selectedIds = [];
+  projectiles = [];
 }
 
-function clearAllUnits(){
-  for(const u of units){
-    if(u.el) u.el.remove();
+function update(dt){
+  incomeTimer += dt;
+  enemyTimer += dt;
+
+  if(incomeTimer >= 1){
+    incomeTimer = 0;
+    state.money += 10 + state.territory * 2;
   }
-  units=[];
-}
 
-function removeDead(){
-  units=units.filter(u=>{
-    if(u.hp<=0){
-      if(u.el) u.el.remove();
-      return false;
-    }
-    return true;
-  });
-}
-
-function loop(now){
-  const dt=Math.min(.05,(now-lastTime)/1000);
-  lastTime=now;
-
-  game.enemyTimer+=dt;
-  const spawnRate=Math.max(2.2,5.2-game.territory*.18);
-  if(game.enemyTimer>=spawnRate){
-    game.enemyTimer=0;
+  const enemyDelay = Math.max(3.5, 7.2 - state.territory * .22);
+  if(enemyTimer >= enemyDelay){
+    enemyTimer = 0;
     spawnEnemy();
   }
 
   for(const u of units){
-    if(u.hp<=0) continue;
+    const s = unitStats[u.type];
+    u.cd = Math.max(0, u.cd - dt);
 
-    u.cooldown-=dt;
+    let target = null;
 
-    if(u.side==="ally" && u.type==="artillery" && u.x>=43){
-      const target=findTarget(u,40);
+    if(u.targetId){
+      target = enemies.find(e=>e.id === u.targetId);
+      if(!target) u.targetId = null;
+    }
 
-      if(target && u.cooldown<=0){
-        target.hp-=u.dmg;
-        showShot(u.x,laneY(u.lane),target.x,laneY(target.lane));
-        u.cooldown=u.attackDelay;
-      }else if(!target && u.cooldown<=0){
-        damageEnemyBase(u.dmg,u.lane,u.x);
-        u.cooldown=u.attackDelay;
+    if(!target){
+      target = nearestEnemy(u, enemies, s.range + 70);
+    }
+
+    if(target){
+      if(dist(u,target) <= s.range){
+        attack(u,target);
+      }else{
+        moveToward(u,target,dt);
       }
-
-      updateUnitEl(u);
       continue;
     }
 
-    const closeTarget=findTarget(u,5.5);
-
-    if(closeTarget){
-      if(u.cooldown<=0){
-        closeTarget.hp-=u.dmg;
-        showShot(u.x,laneY(u.lane),closeTarget.x,laneY(closeTarget.lane));
-        u.cooldown=u.attackDelay;
+    if(u.targetBase === "enemy"){
+      const c = baseCenter(enemyBase);
+      if(dist(u,c) <= s.range + 30){
+        attackBase(u,"enemy");
+      }else{
+        moveToward(u,c,dt);
       }
-      updateUnitEl(u);
       continue;
     }
 
-    if(u.side==="ally"){
-      if(u.x>=88){
-        if(u.cooldown<=0){
-          damageEnemyBase(u.dmg,u.lane,u.x);
-          u.cooldown=u.attackDelay;
-        }
-      }else{
-        u.x+=u.speed*dt;
-      }
-    }else{
-      if(u.x<=12){
-        if(u.cooldown<=0){
-          damageAllyBase(u.dmg,u.lane,u.x);
-          u.cooldown=u.attackDelay;
-          u.hp=0;
-        }
-      }else{
-        u.x-=u.speed*dt;
-      }
+    if(u.dest){
+      const done = moveToward(u,u.dest,dt);
+      if(done) u.dest = null;
     }
-
-    updateUnitEl(u);
   }
 
-  removeDead();
+  for(const e of enemies){
+    const s = unitStats[e.type];
+    e.cd = Math.max(0, e.cd - dt);
+
+    let target = nearestEnemy(e, units, s.range + 70);
+
+    if(target){
+      if(dist(e,target) <= s.range){
+        attack(e,target);
+      }else{
+        moveToward(e,target,dt);
+      }
+      continue;
+    }
+
+    const c = baseCenter(playerBase);
+    if(dist(e,c) <= s.range + 25){
+      attackBase(e,"player");
+    }else{
+      moveToward(e,c,dt);
+    }
+  }
+
+  units = units.filter(u=>u.hp > 0);
+  enemies = enemies.filter(e=>e.hp > 0);
+  selectedIds = selectedIds.filter(id=>units.some(u=>u.id === id));
+
+  for(const p of projectiles){
+    p.life -= dt;
+  }
+  projectiles = projectiles.filter(p=>p.life > 0);
+
   updateUI();
-  requestAnimationFrame(loop);
 }
 
-function saveGame(show){
-  const saveData={...game};
-  localStorage.setItem(SAVE_KEY,JSON.stringify(saveData));
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.save();
+  ctx.scale(camera.zoom,camera.zoom);
+  ctx.translate(-camera.x,-camera.y);
+
+  drawTerrain();
+  drawBuildings();
+  drawUnits();
+  drawProjectiles();
+
+  ctx.restore();
+
+  drawMinimap();
+}
+
+function drawTerrain(){
+  ctx.fillStyle = "#173c20";
+  ctx.fillRect(0,0,WORLD.w,WORLD.h);
+
+  ctx.fillStyle = "#1f4d26";
+  for(let x=0;x<WORLD.w;x+=80){
+    for(let y=0;y<WORLD.h;y+=80){
+      if((x+y)%160===0) ctx.fillRect(x,y,80,80);
+    }
+  }
+
+  ctx.strokeStyle = "rgba(255,255,255,.06)";
+  ctx.lineWidth = 1;
+  for(let x=0;x<WORLD.w;x+=80){
+    ctx.beginPath();
+    ctx.moveTo(x,0);
+    ctx.lineTo(x,WORLD.h);
+    ctx.stroke();
+  }
+  for(let y=0;y<WORLD.h;y+=80){
+    ctx.beginPath();
+    ctx.moveTo(0,y);
+    ctx.lineTo(WORLD.w,y);
+    ctx.stroke();
+  }
+
+  ctx.strokeStyle = "rgba(166,120,57,.45)";
+  ctx.lineWidth = 48;
+  ctx.beginPath();
+  ctx.moveTo(playerBase.x+120, playerBase.y+60);
+  ctx.bezierCurveTo(520,700,850,520,enemyBase.x+50,enemyBase.y+80);
+  ctx.stroke();
+
+  for(const d of decor){
+    if(d.type === "tree"){
+      ctx.fillStyle = "#0b2612";
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,d.s,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = "#1d6b2e";
+      ctx.beginPath();
+      ctx.arc(d.x,d.y-4,d.s*.75,0,Math.PI*2);
+      ctx.fill();
+    }else{
+      ctx.fillStyle = "#4a3a25";
+      ctx.beginPath();
+      ctx.ellipse(d.x,d.y,d.s*1.2,d.s*.7,.2,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = "#8a7048";
+      ctx.beginPath();
+      ctx.ellipse(d.x-3,d.y-3,d.s*.6,d.s*.35,.2,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  ctx.fillStyle = "rgba(0,238,255,.1)";
+  ctx.fillRect(0,0,WORLD.w/2,WORLD.h);
+
+  ctx.fillStyle = "rgba(255,60,100,.09)";
+  ctx.fillRect(WORLD.w/2,0,WORLD.w/2,WORLD.h);
+
+  ctx.fillStyle = "rgba(255,255,255,.6)";
+  ctx.font = "24px Arial";
+  ctx.fillText("WILAYAH KAMU", 80, 80);
+  ctx.fillText("WILAYAH MUSUH", WORLD.w - 330, 80);
+}
+
+function drawBuildingRect(base, color, emoji, label, hp, maxHp){
+  ctx.fillStyle = color;
+  roundRect(base.x,base.y,base.w,base.h,22);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(255,255,255,.35)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.font = "46px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(emoji, base.x + base.w/2, base.y + base.h/2 - 10);
+
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#fff";
+  ctx.fillText(label, base.x + base.w/2, base.y + base.h - 24);
+
+  const pct = Math.max(0,hp/maxHp);
+  ctx.fillStyle = "rgba(0,0,0,.55)";
+  ctx.fillRect(base.x+15,base.y+10,base.w-30,9);
+  ctx.fillStyle = label.includes("Musuh") ? "#ff335f" : "#35f6ff";
+  ctx.fillRect(base.x+15,base.y+10,(base.w-30)*pct,9);
+}
+
+function drawBuildings(){
+  drawBuildingRect(playerBase,"#165d8e","🏰","Markas Kamu",state.playerBaseHp,1200);
+  drawBuildingRect(enemyBase,"#84243a","👹","Markas Musuh",state.enemyBaseHp,state.enemyMaxHp);
+
+  drawSmallBuilding(230,590,"🏭","Pabrik");
+  drawSmallBuilding(110,610,"⚡","Energi");
+  drawSmallBuilding(340,790,"🧪","Lab");
+
+  drawSmallBuilding(1320,350,"🏭","Pabrik Musuh",true);
+  drawSmallBuilding(1510,450,"📡","Radar Musuh",true);
+}
+
+function drawSmallBuilding(x,y,emoji,label,enemy=false){
+  ctx.fillStyle = enemy ? "#562030" : "#123e58";
+  roundRect(x,y,95,70,16);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.stroke();
+
+  ctx.font = "28px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(emoji,x+47,y+32);
+
+  ctx.fillStyle = "#e8f7ff";
+  ctx.font = "12px Arial";
+  ctx.fillText(label,x+47,y+58);
+}
+
+function drawUnits(){
+  for(const e of enemies) drawUnit(e);
+  for(const u of units) drawUnit(u);
+}
+
+function drawUnit(u){
+  const s = unitStats[u.type];
+  const selected = selectedIds.includes(u.id);
+
+  ctx.save();
+  ctx.translate(u.x,u.y);
+
+  if(selected){
+    ctx.strokeStyle = "#ffee55";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0,0,30,0,Math.PI*2);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = u.team === "player" ? "#154e82" : "#7a1d30";
+  ctx.strokeStyle = u.team === "player" ? "#35f6ff" : "#ff335f";
+  ctx.lineWidth = 2;
+  roundRect(-22,-22,44,44,13);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.font = "25px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(s.emoji,0,0);
+
+  ctx.fillStyle = "rgba(0,0,0,.65)";
+  ctx.fillRect(-22,-32,44,6);
+  ctx.fillStyle = u.team === "player" ? "#18ff9a" : "#ffd166";
+  ctx.fillRect(-22,-32,44*Math.max(0,u.hp/u.maxHp),6);
+
+  ctx.restore();
+}
+
+function drawProjectiles(){
+  for(const p of projectiles){
+    ctx.strokeStyle = p.team === "player" ? "#35f6ff" : "#ff335f";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+    ctx.lineTo(p.tx,p.ty);
+    ctx.stroke();
+  }
+}
+
+function drawMinimap(){
+  const w = 155;
+  const h = 92;
+  const x = 12;
+  const y = 12;
+
+  ctx.save();
+  ctx.fillStyle = "rgba(0,0,0,.55)";
+  ctx.fillRect(x,y,w,h);
+  ctx.strokeStyle = "rgba(53,246,255,.7)";
+  ctx.strokeRect(x,y,w,h);
+
+  function mx(wx){return x + wx / WORLD.w * w}
+  function my(wy){return y + wy / WORLD.h * h}
+
+  ctx.fillStyle = "#35f6ff";
+  ctx.fillRect(mx(playerBase.x),my(playerBase.y),10,8);
+
+  ctx.fillStyle = "#ff335f";
+  ctx.fillRect(mx(enemyBase.x),my(enemyBase.y),10,8);
+
+  ctx.fillStyle = "#aefcff";
+  for(const u of units){
+    ctx.fillRect(mx(u.x),my(u.y),3,3);
+  }
+
+  ctx.fillStyle = "#ff9b2f";
+  for(const e of enemies){
+    ctx.fillRect(mx(e.x),my(e.y),3,3);
+  }
+
+  const vw = canvas.width / camera.zoom;
+  const vh = canvas.height / camera.zoom;
+  ctx.strokeStyle = "#fff";
+  ctx.strokeRect(mx(camera.x),my(camera.y),vw/WORLD.w*w,vh/WORLD.h*h);
+
+  ctx.restore();
+}
+
+function roundRect(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function screenToWorld(sx,sy){
+  return {
+    x: sx / camera.zoom + camera.x,
+    y: sy / camera.zoom + camera.y
+  };
+}
+
+function findUnitAt(pos){
+  for(let i=units.length-1;i>=0;i--){
+    if(dist(units[i],pos) < 30) return units[i];
+  }
+  for(let i=enemies.length-1;i>=0;i--){
+    if(dist(enemies[i],pos) < 30) return enemies[i];
+  }
+  return null;
+}
+
+function pointInBase(pos,base){
+  return pos.x>=base.x && pos.x<=base.x+base.w && pos.y>=base.y && pos.y<=base.y+base.h;
+}
+
+let pointer = {
+  down:false,
+  startX:0,
+  startY:0,
+  lastX:0,
+  lastY:0,
+  moved:false
+};
+
+canvas.addEventListener("pointerdown", e=>{
+  canvas.setPointerCapture(e.pointerId);
+  pointer.down = true;
+  pointer.startX = e.offsetX;
+  pointer.startY = e.offsetY;
+  pointer.lastX = e.offsetX;
+  pointer.lastY = e.offsetY;
+  pointer.moved = false;
+});
+
+canvas.addEventListener("pointermove", e=>{
+  if(!pointer.down) return;
+
+  const dx = e.offsetX - pointer.lastX;
+  const dy = e.offsetY - pointer.lastY;
+  const total = Math.hypot(e.offsetX-pointer.startX,e.offsetY-pointer.startY);
+
+  if(total > 8){
+    pointer.moved = true;
+    camera.x -= dx / camera.zoom;
+    camera.y -= dy / camera.zoom;
+    clampCamera();
+  }
+
+  pointer.lastX = e.offsetX;
+  pointer.lastY = e.offsetY;
+});
+
+canvas.addEventListener("pointerup", e=>{
+  pointer.down = false;
+
+  if(pointer.moved) return;
+
+  const pos = screenToWorld(e.offsetX,e.offsetY);
+  handleClick(pos);
+});
+
+function handleClick(pos){
+  const hit = findUnitAt(pos);
+
+  if(hit){
+    if(hit.team === "player"){
+      if(selectedIds.includes(hit.id)){
+        selectedIds = selectedIds.filter(id=>id!==hit.id);
+      }else{
+        selectedIds = [hit.id];
+      }
+      return;
+    }
+
+    if(selectedIds.length){
+      for(const id of selectedIds){
+        const u = units.find(x=>x.id===id);
+        if(u){
+          u.targetId = hit.id;
+          u.targetBase = null;
+          u.dest = null;
+        }
+      }
+      toast("Target musuh dikunci");
+      return;
+    }
+  }
+
+  if(pointInBase(pos,enemyBase) && selectedIds.length){
+    for(const id of selectedIds){
+      const u = units.find(x=>x.id===id);
+      if(u){
+        u.targetBase = "enemy";
+        u.targetId = null;
+        u.dest = null;
+      }
+    }
+    toast("Menyerang markas musuh");
+    return;
+  }
+
+  if(selectedIds.length){
+    for(const id of selectedIds){
+      const u = units.find(x=>x.id===id);
+      if(u){
+        u.dest = {
+          x: pos.x + (Math.random()-.5)*40,
+          y: pos.y + (Math.random()-.5)*40
+        };
+        u.targetBase = null;
+        u.targetId = null;
+      }
+    }
+    toast("Unit bergerak");
+  }
+}
+
+function gameLoop(now){
+  const dt = Math.min(.05,(now-last)/1000);
+  last = now;
+
+  update(dt);
+  draw();
+
+  requestAnimationFrame(gameLoop);
+}
+
+function saveGame(show=false){
+  localStorage.setItem(SAVE_KEY,JSON.stringify(state));
   if(show) toast("Game disimpan");
 }
 
-function loadGame(){
+function loadSave(){
   try{
-    const d=localStorage.getItem(SAVE_KEY);
-    return d?JSON.parse(d):null;
+    const raw = localStorage.getItem(SAVE_KEY);
+    return raw ? JSON.parse(raw) : null;
   }catch(e){
     return null;
   }
@@ -708,9 +1109,11 @@ function resetGame(){
 
 setInterval(()=>saveGame(false),5000);
 
+resize();
+centerCamera("home");
 updateUI();
-log("Game siap. Kirim pasukan, tank, dan artileri ke wilayah musuh.");
-requestAnimationFrame(loop);
+log("Game siap. Buat pasukan, pilih unit, lalu tekan tanah atau markas musuh.");
+requestAnimationFrame(gameLoop);
 </script>
 </body>
 </html>
