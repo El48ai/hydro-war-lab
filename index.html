@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HYDRO WAR LAB - Enemy Visible</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>HYDRO WAR LAB - Battle Territory</title>
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -12,36 +12,36 @@ body{
   font-family:Arial,sans-serif;
   color:white;
   background:
-    radial-gradient(circle at top,#123d66 0%,transparent 35%),
-    linear-gradient(160deg,#030713,#07182b,#020308);
+    radial-gradient(circle at top,#123d66 0%,transparent 38%),
+    linear-gradient(160deg,#030713,#06182d,#02040a);
   min-height:100vh;
 }
-.app{max-width:1150px;margin:auto;padding:12px 12px 90px}
+.app{max-width:1180px;margin:auto;padding:12px 12px 90px}
 .top{
   position:sticky;top:0;z-index:30;
-  background:rgba(3,7,19,.8);
+  background:rgba(3,7,19,.82);
   backdrop-filter:blur(14px);
   padding:12px 0;
   display:flex;justify-content:space-between;align-items:center;gap:10px
 }
 .logo{display:flex;align-items:center;gap:10px}
 .logoBox{
-  width:48px;height:48px;border-radius:18px;
-  display:grid;place-items:center;font-size:26px;
+  width:50px;height:50px;border-radius:18px;
+  display:grid;place-items:center;font-size:27px;
   background:linear-gradient(135deg,#21f6ff55,#8b5cff55);
-  border:1px solid #ffffff22;
+  border:1px solid #ffffff25;
   box-shadow:0 0 28px #21f6ff55
 }
 h1{margin:0;font-size:20px}
 .sub{font-size:12px;color:#a8c6d8;margin-top:3px}
 .pill{
   padding:9px 12px;border-radius:999px;
-  background:#ffffff12;border:1px solid #ffffff22;
+  background:#ffffff12;border:1px solid #ffffff24;
   font-size:12px;white-space:nowrap
 }
 .res{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(6,1fr);
   gap:8px;margin:10px 0 12px
 }
 .box{
@@ -55,7 +55,7 @@ h1{margin:0;font-size:20px}
 .box b{font-size:18px}
 .layout{
   display:grid;
-  grid-template-columns:1.25fr .75fr;
+  grid-template-columns:1.35fr .65fr;
   gap:12px
 }
 .card{
@@ -68,7 +68,7 @@ h1{margin:0;font-size:20px}
 .cardHead{padding:14px 14px 0}
 .cardHead h2{margin:0;font-size:19px}
 .cardHead p{margin:5px 0 0;color:#a8c6d8;font-size:12px;line-height:1.35}
-.map{
+.battlefield{
   position:relative;
   height:560px;
   margin:14px;
@@ -76,112 +76,83 @@ h1{margin:0;font-size:20px}
   overflow:hidden;
   border:1px solid #35f6ff40;
   background:
-    linear-gradient(#ffffff08 1px,transparent 1px),
-    linear-gradient(90deg,#ffffff08 1px,transparent 1px),
-    radial-gradient(circle at center,#35f6ff22,transparent 42%),
-    linear-gradient(135deg,#092544,#050814);
-  background-size:34px 34px,34px 34px,auto,auto;
+    linear-gradient(#ffffff07 1px,transparent 1px),
+    linear-gradient(90deg,#ffffff07 1px,transparent 1px),
+    linear-gradient(90deg,#06325a 0%,#071426 48%,#35101b 100%);
+  background-size:34px 34px,34px 34px,auto;
 }
-.hq{
-  position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  width:155px;height:155px;border-radius:42px;
+.zone{
+  position:absolute;top:0;bottom:0;width:50%;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding-top:12px;
+  font-size:12px;color:#bdefff;
+  pointer-events:none
+}
+.zone.enemy{right:0;color:#ffd4dc}
+.zone.ally{left:0}
+.midLine{
+  position:absolute;left:50%;top:0;bottom:0;width:2px;
+  background:linear-gradient(transparent,#ffffff55,transparent)
+}
+.base{
+  position:absolute;z-index:5;
+  top:50%;transform:translateY(-50%);
+  width:120px;height:150px;border-radius:28px;
   display:grid;place-items:center;text-align:center;
-  background:radial-gradient(circle,#35f6ff66,#4d7cff22 55%,#ffffff0d);
-  border:1px solid #35f6ff88;
-  box-shadow:0 0 55px #35f6ff55;
-  z-index:4;
-  animation:pulse 2s infinite ease-in-out
+  border:1px solid #ffffff30;
+  box-shadow:0 0 38px #00000066
 }
-@keyframes pulse{
-  50%{box-shadow:0 0 85px #35f6ff88}
+.allyBase{
+  left:18px;
+  background:radial-gradient(circle,#35f6ff55,#183d6d);
+  box-shadow:0 0 45px #35f6ff66
 }
-.hq strong{display:block;font-size:46px}
-.hq span{font-size:12px}
-.node{
-  position:absolute;
-  width:135px;min-height:115px;
-  border-radius:22px;
-  background:#ffffff16;
-  border:1px solid #ffffff24;
-  padding:12px;
-  z-index:5;
-  box-shadow:0 16px 36px #00000055;
-  cursor:pointer
+.enemyBase{
+  right:18px;
+  background:radial-gradient(circle,#ff335f66,#4a111d);
+  box-shadow:0 0 45px #ff335f66
 }
-.node:active{transform:scale(.96)}
-.node .e{font-size:30px}
-.node h3{margin:3px 0;font-size:13px}
-.node p{margin:0;color:#a8c6d8;font-size:11px}
-.node small{
-  display:inline-block;margin-top:6px;
-  padding:4px 8px;border-radius:999px;
-  background:#35f6ff22;color:#bffcff
+.base strong{display:block;font-size:42px}
+.base span{font-size:12px}
+.lane{
+  position:absolute;left:0;right:0;height:1px;
+  border-top:1px dashed #ffffff22
 }
-.n1{left:5%;top:6%}
-.n2{right:5%;top:6%}
-.n3{left:5%;bottom:8%}
-.n4{right:5%;bottom:8%}
-.n5{left:50%;bottom:3%;transform:translateX(-50%)}
-.enemyLayer{
-  position:absolute;
-  inset:0;
-  z-index:6;
-  pointer-events:none;
+.l1{top:28%}.l2{top:50%}.l3{top:72%}
+.unit{
+  position:absolute;z-index:10;
+  width:48px;height:48px;border-radius:15px;
+  display:grid;place-items:center;
+  transform:translate(-50%,-50%);
+  border:1px solid #ffffff33;
+  box-shadow:0 0 20px #00000077;
+  transition:transform .05s linear;
 }
-.enemy{
-  position:absolute;
-  width:76px;height:76px;
-  display:grid;
-  place-items:center;
-  border-radius:22px;
-  background:linear-gradient(135deg,#ff305f55,#ff990033);
-  border:1px solid #ff6b8a88;
-  box-shadow:0 0 28px #ff305f88;
-  animation:enemyMove 1.1s infinite ease-in-out alternate;
+.unit .emoji{font-size:27px;line-height:1}
+.allyUnit{
+  background:linear-gradient(135deg,#35f6ff77,#4d7cff55);
+  box-shadow:0 0 22px #35f6ff77
 }
-.enemy .face{font-size:34px;filter:drop-shadow(0 0 10px #ff335f)}
-.enemy.boss{
-  width:110px;height:110px;
-  border-radius:30px;
-  background:linear-gradient(135deg,#ff003d88,#ffcc0055);
-  box-shadow:0 0 45px #ff335f;
+.enemyUnit{
+  background:linear-gradient(135deg,#ff335f77,#ff9b2f55);
+  box-shadow:0 0 22px #ff335f77
 }
-.enemy.boss .face{font-size:54px}
-.enemyHp{
-  position:absolute;
-  left:8px;right:8px;bottom:7px;
-  height:7px;border-radius:99px;
-  background:#00000066;overflow:hidden
+.hp{
+  position:absolute;left:5px;right:5px;bottom:3px;height:5px;
+  border-radius:99px;background:#00000077;overflow:hidden
 }
-.enemyHp span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff335f,#ffd166)}
-@keyframes enemyMove{
-  from{transform:translateY(0) rotate(-2deg)}
-  to{transform:translateY(10px) rotate(2deg)}
-}
-.laser{
-  position:absolute;
-  height:4px;
+.hp span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#18ff9a,#35f6ff)}
+.enemyUnit .hp span{background:linear-gradient(90deg,#ff335f,#ffd166)}
+.shot{
+  position:absolute;z-index:20;height:4px;border-radius:99px;
   background:linear-gradient(90deg,transparent,#35f6ff,#fff,#ff335f,transparent);
+  box-shadow:0 0 16px #35f6ff;
   transform-origin:left center;
-  border-radius:99px;
-  box-shadow:0 0 18px #35f6ff;
-  z-index:7;
-  display:none;
+  pointer-events:none;
+  animation:fadeShot .25s linear forwards
 }
+@keyframes fadeShot{to{opacity:0}}
 .panel{padding:14px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
-.tab{
-  border:1px solid #ffffff22;
-  background:#ffffff10;
-  color:white;
-  border-radius:15px;
-  padding:10px 4px;
-  font-size:12px
-}
-.tab.active{background:linear-gradient(135deg,#35f6ff55,#8b5cff55)}
-.page{display:none}
-.page.active{display:block}
 .btn{
   width:100%;
   border:0;
@@ -204,12 +175,12 @@ h1{margin:0;font-size:20px}
   background:#ffffff18;overflow:hidden;margin-top:8px
 }
 .bar span{
-  display:block;height:100%;width:0%;
+  display:block;height:100%;width:100%;
   background:linear-gradient(90deg,#ff335f,#ffd166);
   transition:.2s
 }
 .log{
-  margin-top:10px;height:155px;overflow:auto;
+  margin-top:10px;height:165px;overflow:auto;
   background:#00000035;
   border:1px solid #ffffff18;
   border-radius:17px;
@@ -230,22 +201,19 @@ h1{margin:0;font-size:20px}
   white-space:nowrap
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:850px){
+@media(max-width:880px){
   .layout{grid-template-columns:1fr}
   .res{grid-template-columns:repeat(2,1fr)}
-  .map{height:630px}
+  .battlefield{height:620px}
 }
 @media(max-width:520px){
   h1{font-size:17px}
-  .map{height:680px;margin:10px}
-  .hq{width:130px;height:130px;border-radius:35px}
-  .hq strong{font-size:38px}
-  .node{width:125px;min-height:108px;padding:10px}
-  .n1{left:3%;top:4%}
-  .n2{right:3%;top:4%}
-  .n3{left:3%;bottom:18%}
-  .n4{right:3%;bottom:18%}
-  .n5{left:50%;bottom:2%}
+  .pill{display:none}
+  .battlefield{height:640px;margin:10px}
+  .base{width:92px;height:120px;border-radius:23px}
+  .base strong{font-size:32px}
+  .unit{width:42px;height:42px}
+  .unit .emoji{font-size:24px}
 }
 </style>
 </head>
@@ -257,140 +225,84 @@ h1{margin:0;font-size:20px}
       <div class="logoBox">⚡</div>
       <div>
         <h1>HYDRO WAR LAB</h1>
-        <div class="sub">Musuh terlihat, drone menyerang, boss wave hadir</div>
+        <div class="sub">Kirim pasukan, tank, dan artileri fiksi ke wilayah musuh</div>
       </div>
     </div>
-    <div class="pill">Wave <b id="waveTop">1</b> • Power <b id="powerTop">0</b></div>
+    <div class="pill">Wilayah <b id="territoryTop">1</b> • Power <b id="powerTop">0</b></div>
   </div>
 
   <div class="res">
-    <div class="box"><small>💧 Air</small><b id="water">0</b></div>
     <div class="box"><small>⚡ Energi</small><b id="energy">0</b></div>
     <div class="box"><small>🔩 Alloy</small><b id="alloy">0</b></div>
-    <div class="box"><small>🧠 Chip</small><b id="chip">0</b></div>
-    <div class="box"><small>🤖 Robot</small><b id="robot">0</b></div>
-    <div class="box"><small>🛰️ Drone</small><b id="drone">0</b></div>
-    <div class="box"><small>🛡️ Shield</small><b id="shield">0</b></div>
     <div class="box"><small>💰 Credit</small><b id="credit">0</b></div>
+    <div class="box"><small>🏰 HP Markas</small><b id="baseHp">0</b></div>
+    <div class="box"><small>👹 HP Musuh</small><b id="enemyHp">0</b></div>
+    <div class="box"><small>🛡️ Power</small><b id="power">0</b></div>
   </div>
 
   <div class="layout">
     <div class="card">
       <div class="cardHead">
-        <h2>🏙️ Markas & Arena Musuh</h2>
-        <p>Tekan Radar Musuh atau tombol Battle untuk memunculkan musuh di arena.</p>
+        <h2>🗺️ Peta Perang Wilayah</h2>
+        <p>Pasukan kamu bergerak dari kiri ke kanan. Musuh bergerak dari kanan ke kiri.</p>
       </div>
 
-      <div class="map" id="map">
-        <div class="hq">
+      <div class="battlefield" id="field">
+        <div class="zone ally">WILAYAH KAMU</div>
+        <div class="zone enemy">WILAYAH MUSUH</div>
+        <div class="midLine"></div>
+        <div class="lane l1"></div>
+        <div class="lane l2"></div>
+        <div class="lane l3"></div>
+
+        <div class="base allyBase">
           <div>
             <strong>🏰</strong>
-            <span>HQ Lv <b id="lvHq">1</b></span>
+            <span>Markas Kamu</span>
           </div>
         </div>
 
-        <div class="node n1" onclick="makeEnergy()">
-          <div class="e">💧</div>
-          <h3>Hydrogen Core</h3>
-          <p>Air jadi energi</p>
-          <small>Lv <b id="lvHydro">1</b></small>
+        <div class="base enemyBase">
+          <div>
+            <strong>👹</strong>
+            <span>Markas Musuh</span>
+          </div>
         </div>
-
-        <div class="node n2" onclick="research()">
-          <div class="e">🧪</div>
-          <h3>Quantum Lab</h3>
-          <p>Membuat chip</p>
-          <small>Lv <b id="lvLab">1</b></small>
-        </div>
-
-        <div class="node n3" onclick="makeAlloy()">
-          <div class="e">🏭</div>
-          <h3>Alloy Foundry</h3>
-          <p>Material canggih</p>
-          <small>Lv <b id="lvAlloy">1</b></small>
-        </div>
-
-        <div class="node n4" onclick="makeDrone()">
-          <div class="e">🛰️</div>
-          <h3>Drone Factory</h3>
-          <p>Drone penjaga</p>
-          <small>Lv <b id="lvFactory">1</b></small>
-        </div>
-
-        <div class="node n5" onclick="startBattle()">
-          <div class="e">📡</div>
-          <h3>Radar Musuh</h3>
-          <p>Munculkan wave</p>
-          <small>Wave <b id="waveNode">1</b></small>
-        </div>
-
-        <div id="laser" class="laser"></div>
-        <div id="enemyLayer" class="enemyLayer"></div>
       </div>
     </div>
 
     <div class="card panel">
-      <div class="tabs">
-        <button class="tab active" onclick="tab('prod',this)">Produksi</button>
-        <button class="tab" onclick="tab('upg',this)">Upgrade</button>
-        <button class="tab" onclick="tab('war',this)">Battle</button>
+      <div class="box">
+        <small>HP Markas Musuh</small>
+        <div class="bar"><span id="enemyHpBar"></span></div>
       </div>
 
-      <div id="prod" class="page active">
-        <button class="btn" onclick="collect()">📦 Kumpulkan Resource
-          <small>Tambah air, alloy, credit, dan energi.</small>
-        </button>
-        <button class="btn green" onclick="makeEnergy()">⚡ Jalankan Mesin Hidrogen
-          <small>Butuh air, menghasilkan energi.</small>
-        </button>
-        <button class="btn" onclick="makeAlloy()">🏭 Produksi Alloy
-          <small>Butuh energi dan credit.</small>
-        </button>
-        <button class="btn" onclick="research()">🧪 Riset Chip
-          <small>Butuh energi dan alloy.</small>
-        </button>
-        <button class="btn green" onclick="makeRobot()">🤖 Cetak Robot
-          <small>Robot menambah power markas.</small>
-        </button>
-        <button class="btn green" onclick="makeDrone()">🛰️ Buat Drone
-          <small>Drone menyerang musuh saat battle.</small>
-        </button>
-        <button class="btn green" onclick="addShield()">🛡️ Isi Shield
-          <small>Shield mengurangi kerusakan.</small>
-        </button>
-      </div>
+      <button class="btn" onclick="collect()">📦 Kumpulkan Resource
+        <small>Tambah energi, alloy, dan credit.</small>
+      </button>
 
-      <div id="upg" class="page">
-        <button class="btn green" onclick="upgrade('hydro')">⬆️ Upgrade Hydrogen Core</button>
-        <button class="btn green" onclick="upgrade('lab')">⬆️ Upgrade Lab</button>
-        <button class="btn green" onclick="upgrade('alloy')">⬆️ Upgrade Alloy Foundry</button>
-        <button class="btn green" onclick="upgrade('factory')">⬆️ Upgrade Drone Factory</button>
-        <button class="btn green" onclick="upgrade('hq')">⬆️ Upgrade HQ Markas</button>
-      </div>
+      <button class="btn green" onclick="sendUnit('soldier')">🧍 Kirim Pasukan
+        <small>Murah dan cepat. Cocok untuk menekan musuh.</small>
+      </button>
 
-      <div id="war" class="page">
-        <div class="box">
-          <small>HP Musuh</small>
-          <div class="bar"><span id="enemyHpBar"></span></div>
-        </div>
+      <button class="btn green" onclick="sendUnit('tank')">🚙 Kirim Tank Sci-Fi
+        <small>Lebih kuat, HP besar, jalan lebih lambat.</small>
+      </button>
 
-        <div class="box">
-          <small>Power Markas</small>
-          <b id="myPowerInfo">0</b>
-        </div>
+      <button class="btn green" onclick="sendUnit('artillery')">🎯 Kirim Artileri Fiksi
+        <small>Menyerang dari jarak jauh di tengah arena.</small>
+      </button>
 
-        <div class="box">
-          <small>Power Musuh</small>
-          <b id="enemyPowerInfo">0</b>
-        </div>
+      <button class="btn red" onclick="spawnEnemy()">👾 Pancing Musuh
+        <small>Munculkan pasukan musuh lebih cepat.</small>
+      </button>
 
-        <button class="btn red" id="battleBtn" onclick="startBattle()">🚨 Mulai Wave Musuh
-          <small>Musuh akan muncul di arena dan menyerang HQ.</small>
-        </button>
+      <button class="btn" onclick="repairBase()">🛠️ Perbaiki Markas
+        <small>Memulihkan HP markas kamu.</small>
+      </button>
 
-        <button class="btn dark" onclick="save()">💾 Simpan Game</button>
-        <button class="btn dark" onclick="resetGame()">🗑️ Reset Game</button>
-      </div>
+      <button class="btn dark" onclick="saveGame(true)">💾 Simpan Game</button>
+      <button class="btn dark" onclick="resetGame()">🗑️ Reset Game</button>
 
       <div class="log" id="log"></div>
     </div>
@@ -400,67 +312,112 @@ h1{margin:0;font-size:20px}
 <div class="toast" id="toast">Info</div>
 
 <script>
-const SAVE_KEY = "hydro_enemy_visible_v1";
+const SAVE_KEY = "hydro_territory_war_v1";
 
-let game = load() || {
-  water:180, energy:100, alloy:120, chip:15,
-  robot:0, drone:0, shield:50, credit:150,
-  wave:1,
-  lv:{hydro:1,lab:1,alloy:1,factory:1,hq:1},
-  enemyHp:0, enemyMaxHp:0, enemyPower:0,
-  busy:false
+const unitData = {
+  soldier: {
+    name:"Pasukan",
+    emoji:"🧍",
+    hp:50,
+    dmg:10,
+    speed:5.2,
+    cooldown:.55,
+    cost:{energy:8, alloy:18, credit:45}
+  },
+  tank: {
+    name:"Tank Sci-Fi",
+    emoji:"🚙",
+    hp:140,
+    dmg:26,
+    speed:3.1,
+    cooldown:.8,
+    cost:{energy:45, alloy:80, credit:120}
+  },
+  artillery: {
+    name:"Artileri Fiksi",
+    emoji:"🎯",
+    hp:75,
+    dmg:36,
+    speed:2.2,
+    cooldown:1.25,
+    cost:{energy:70, alloy:95, credit:150}
+  },
+  enemy: {
+    name:"Drone Musuh",
+    emoji:"👾",
+    hp:65,
+    dmg:13,
+    speed:3.5,
+    cooldown:.7
+  },
+  enemyHeavy: {
+    name:"Robot Musuh",
+    emoji:"🤖",
+    hp:120,
+    dmg:24,
+    speed:2.8,
+    cooldown:.85
+  }
 };
+
+let game = loadGame() || {
+  energy:350,
+  alloy:300,
+  credit:350,
+  baseHp:600,
+  baseMaxHp:600,
+  enemyHp:700,
+  enemyMaxHp:700,
+  territory:1,
+  enemyTimer:0
+};
+
+let units = [];
+let idCounter = 1;
+let lastTime = performance.now();
 
 function $(id){return document.getElementById(id)}
 function num(v){return Math.floor(v).toLocaleString("id-ID")}
-function toast(t){
-  $("toast").textContent=t;
+function laneY(lane){return [28,50,72][lane]}
+function randLane(){return Math.floor(Math.random()*3)}
+
+function toast(text){
+  $("toast").textContent=text;
   $("toast").classList.add("show");
-  clearTimeout(window.tt);
-  window.tt=setTimeout(()=>$("toast").classList.remove("show"),1600);
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>$("toast").classList.remove("show"),1500);
 }
-function log(t){
+
+function log(text){
   const d=document.createElement("div");
-  d.textContent="• "+t;
+  d.textContent="• "+text;
   $("log").prepend(d);
+  while($("log").children.length>40){
+    $("log").removeChild($("log").lastChild);
+  }
 }
+
 function power(){
   return Math.floor(
-    game.lv.hq*55+
-    game.robot*13+
-    game.drone*18+
-    game.shield*.5+
-    game.lv.factory*15+
-    game.lv.lab*8
+    game.baseHp*.18 +
+    units.filter(u=>u.side==="ally").reduce((a,u)=>a+u.hp+u.dmg*4,0)
   );
 }
-function update(){
-  $("water").textContent=num(game.water);
+
+function updateUI(){
   $("energy").textContent=num(game.energy);
   $("alloy").textContent=num(game.alloy);
-  $("chip").textContent=num(game.chip);
-  $("robot").textContent=num(game.robot);
-  $("drone").textContent=num(game.drone);
-  $("shield").textContent=num(game.shield);
   $("credit").textContent=num(game.credit);
-
-  $("waveTop").textContent=game.wave;
-  $("waveNode").textContent=game.wave;
+  $("baseHp").textContent=num(game.baseHp);
+  $("enemyHp").textContent=num(game.enemyHp);
+  $("territoryTop").textContent=game.territory;
+  $("power").textContent=num(power());
   $("powerTop").textContent=num(power());
-  $("myPowerInfo").textContent=num(power());
-  $("enemyPowerInfo").textContent=num(game.enemyPower || 0);
 
-  $("lvHydro").textContent=game.lv.hydro;
-  $("lvLab").textContent=game.lv.lab;
-  $("lvAlloy").textContent=game.lv.alloy;
-  $("lvFactory").textContent=game.lv.factory;
-  $("lvHq").textContent=game.lv.hq;
-
-  const pct = game.enemyMaxHp ? Math.max(0, game.enemyHp/game.enemyMaxHp*100) : 0;
-  $("enemyHpBar").style.width = pct+"%";
-
-  save(false);
+  const pct=Math.max(0,game.enemyHp/game.enemyMaxHp*100);
+  $("enemyHpBar").style.width=pct+"%";
 }
+
 function spend(cost){
   for(const k in cost){
     if(game[k] < cost[k]){
@@ -468,237 +425,292 @@ function spend(cost){
       return false;
     }
   }
-  for(const k in cost) game[k]-=cost[k];
+  for(const k in cost){
+    game[k]-=cost[k];
+  }
   return true;
 }
-function collect(){
-  game.water += 30 + game.lv.hydro*5;
-  game.alloy += 20 + game.lv.alloy*5;
-  game.credit += 25 + game.lv.hq*6;
-  game.energy += 10;
-  log("Resource masuk ke markas.");
-  update();
-}
-function makeEnergy(){
-  if(!spend({water:25})) return;
-  const gain=55+game.lv.hydro*25;
-  game.energy+=gain;
-  log("Mesin hidrogen menghasilkan +"+gain+" energi.");
-  update();
-}
-function makeAlloy(){
-  if(!spend({energy:35,credit:20})) return;
-  const gain=55+game.lv.alloy*20;
-  game.alloy+=gain;
-  log("Alloy Foundry menghasilkan +"+gain+" alloy.");
-  update();
-}
-function research(){
-  if(!spend({energy:45,alloy:35})) return;
-  const gain=4+game.lv.lab;
-  game.chip+=gain;
-  log("Lab menghasilkan +"+gain+" chip.");
-  update();
-}
-function makeRobot(){
-  if(!spend({energy:70,alloy:50,chip:5})) return;
-  const gain=1+Math.floor(game.lv.hq/4);
-  game.robot+=gain;
-  log("Robot penjaga dicetak +"+gain+".");
-  update();
-}
-function makeDrone(){
-  if(!spend({energy:65,alloy:55,chip:4})) return;
-  const gain=1+Math.floor(game.lv.factory/3);
-  game.drone+=gain;
-  log("Drone pertahanan dibuat +"+gain+".");
-  update();
-}
-function addShield(){
-  if(!spend({energy:55,chip:2})) return;
-  const gain=45+game.lv.hq*8;
-  game.shield+=gain;
-  log("Shield markas bertambah +"+gain+".");
-  update();
-}
-function upgrade(k){
-  const cost={
-    hydro:{energy:120,alloy:60,chip:3,credit:60},
-    lab:{energy:130,alloy:80,chip:5,credit:80},
-    alloy:{energy:100,alloy:70,chip:3,credit:70},
-    factory:{energy:150,alloy:110,chip:7,credit:100},
-    hq:{energy:220,alloy:160,chip:12,credit:160}
-  }[k];
 
-  const lv=game.lv[k];
-  const finalCost={
-    energy:Math.floor(cost.energy*lv),
-    alloy:Math.floor(cost.alloy*lv),
-    chip:Math.floor(cost.chip*lv),
-    credit:Math.floor(cost.credit*lv)
+function collect(){
+  const e=90+game.territory*8;
+  const a=75+game.territory*7;
+  const c=80+game.territory*9;
+  game.energy+=e;
+  game.alloy+=a;
+  game.credit+=c;
+  log("Resource masuk: +" + e + " energi, +" + a + " alloy, +" + c + " credit.");
+  updateUI();
+}
+
+function createUnit(type, side){
+  const data = side==="ally" ? unitData[type] : unitData[type];
+  const lane = randLane();
+  const unit = {
+    id:idCounter++,
+    type,
+    side,
+    lane,
+    x:side==="ally"?10:90,
+    hp:data.hp,
+    maxHp:data.hp,
+    dmg:data.dmg,
+    speed:data.speed,
+    cooldown:0,
+    attackDelay:data.cooldown,
+    emoji:data.emoji,
+    name:data.name,
+    el:null
   };
 
-  if(!spend(finalCost)){
-    log("Upgrade gagal. Butuh resource lebih banyak.");
-    return;
+  const el=document.createElement("div");
+  el.className="unit " + (side==="ally" ? "allyUnit" : "enemyUnit");
+  el.innerHTML=`<div class="emoji">${data.emoji}</div><div class="hp"><span></span></div>`;
+  $("field").appendChild(el);
+  unit.el=el;
+  units.push(unit);
+  updateUnitEl(unit);
+}
+
+function sendUnit(type){
+  const cost=unitData[type].cost;
+  if(!spend(cost)) return;
+  createUnit(type,"ally");
+  log("Kamu mengirim " + unitData[type].name + " menuju wilayah musuh.");
+  updateUI();
+}
+
+function spawnEnemy(){
+  const heavy = Math.random() < Math.min(.45, game.territory*.04);
+  createUnit(heavy ? "enemyHeavy" : "enemy", "enemy");
+  log((heavy ? "Robot Musuh" : "Drone Musuh") + " muncul dari wilayah musuh.");
+}
+
+function repairBase(){
+  if(!spend({energy:80, alloy:70, credit:60})) return;
+  const heal=160;
+  game.baseHp=Math.min(game.baseMaxHp,game.baseHp+heal);
+  log("Markas diperbaiki +" + heal + " HP.");
+  updateUI();
+}
+
+function updateUnitEl(u){
+  if(!u.el) return;
+  u.el.style.left=u.x+"%";
+  u.el.style.top=laneY(u.lane)+"%";
+  const hpPct=Math.max(0,u.hp/u.maxHp*100);
+  u.el.querySelector(".hp span").style.width=hpPct+"%";
+}
+
+function findTarget(u, range){
+  let best=null;
+  let bestDist=999;
+  for(const t of units){
+    if(t.side===u.side) continue;
+    if(t.lane!==u.lane) continue;
+    const d=Math.abs(t.x-u.x);
+    if(d<bestDist && d<=range){
+      best=t;
+      bestDist=d;
+    }
+  }
+  return best;
+}
+
+function showShot(x1,y1,x2,y2){
+  const field=$("field");
+  const rect=field.getBoundingClientRect();
+
+  const sx=rect.width*x1/100;
+  const sy=rect.height*y1/100;
+  const ex=rect.width*x2/100;
+  const ey=rect.height*y2/100;
+
+  const dx=ex-sx;
+  const dy=ey-sy;
+  const len=Math.sqrt(dx*dx+dy*dy);
+  const angle=Math.atan2(dy,dx)*180/Math.PI;
+
+  const s=document.createElement("div");
+  s.className="shot";
+  s.style.left=sx+"px";
+  s.style.top=sy+"px";
+  s.style.width=len+"px";
+  s.style.transform="rotate("+angle+"deg)";
+  field.appendChild(s);
+
+  setTimeout(()=>s.remove(),260);
+}
+
+function damageEnemyBase(amount, lane, fromX){
+  game.enemyHp-=amount;
+  showShot(fromX,laneY(lane),93,50);
+
+  if(game.enemyHp<=0){
+    winTerritory();
+  }
+}
+
+function damageAllyBase(amount, lane, fromX){
+  game.baseHp-=amount;
+  showShot(fromX,laneY(lane),7,50);
+
+  if(game.baseHp<=0){
+    loseBase();
+  }
+}
+
+function winTerritory(){
+  game.enemyHp=0;
+
+  const rewardE=350+game.territory*90;
+  const rewardA=300+game.territory*80;
+  const rewardC=280+game.territory*85;
+
+  game.energy+=rewardE;
+  game.alloy+=rewardA;
+  game.credit+=rewardC;
+  game.baseHp=Math.min(game.baseMaxHp,game.baseHp+180);
+
+  log("Wilayah musuh berhasil direbut! Hadiah besar diterima.");
+  toast("Wilayah direbut!");
+
+  game.territory++;
+  game.enemyMaxHp=700+game.territory*260;
+  game.enemyHp=game.enemyMaxHp;
+
+  clearAllUnits();
+  updateUI();
+}
+
+function loseBase(){
+  toast("Markas rusak!");
+  log("Markas kamu hancur sebagian. Musuh mundur, tapi resource berkurang.");
+
+  game.baseHp=220;
+  game.energy=Math.max(0,game.energy-200);
+  game.alloy=Math.max(0,game.alloy-150);
+  game.credit=Math.max(0,game.credit-150);
+
+  clearAllUnits();
+  updateUI();
+}
+
+function clearAllUnits(){
+  for(const u of units){
+    if(u.el) u.el.remove();
+  }
+  units=[];
+}
+
+function removeDead(){
+  units=units.filter(u=>{
+    if(u.hp<=0){
+      if(u.el) u.el.remove();
+      return false;
+    }
+    return true;
+  });
+}
+
+function loop(now){
+  const dt=Math.min(.05,(now-lastTime)/1000);
+  lastTime=now;
+
+  game.enemyTimer+=dt;
+  const spawnRate=Math.max(2.2,5.2-game.territory*.18);
+  if(game.enemyTimer>=spawnRate){
+    game.enemyTimer=0;
+    spawnEnemy();
   }
 
-  game.lv[k]++;
-  log("Upgrade berhasil: "+k+" level "+game.lv[k]+".");
-  update();
-}
-function tab(id,btn){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  $(id).classList.add("active");
-  btn.classList.add("active");
-}
-function spawnEnemies(){
-  const layer=$("enemyLayer");
-  layer.innerHTML="";
-  const boss = game.wave % 5 === 0;
-  const count = boss ? 1 : Math.min(6, 2 + Math.floor(game.wave/2));
+  for(const u of units){
+    if(u.hp<=0) continue;
 
-  const positions = [
-    [12,35],[78,34],[18,62],[72,62],[42,18],[50,78]
-  ];
+    u.cooldown-=dt;
 
-  for(let i=0;i<count;i++){
-    const e=document.createElement("div");
-    e.className="enemy"+(boss?" boss":"");
-    e.style.left=positions[i%positions.length][0]+"%";
-    e.style.top=positions[i%positions.length][1]+"%";
-    e.innerHTML=`<div class="face">${boss?"👹":"👾"}</div><div class="enemyHp"><span></span></div>`;
-    layer.appendChild(e);
-  }
-}
-function clearEnemies(){
-  $("enemyLayer").innerHTML="";
-}
-function flashLaser(){
-  const laser=$("laser");
-  const map=$("map").getBoundingClientRect();
+    if(u.side==="ally" && u.type==="artillery" && u.x>=43){
+      const target=findTarget(u,40);
 
-  laser.style.display="block";
-  laser.style.left="50%";
-  laser.style.top="50%";
-  laser.style.width=(120+Math.random()*190)+"px";
-  laser.style.transform=`rotate(${Math.random()*360}deg)`;
+      if(target && u.cooldown<=0){
+        target.hp-=u.dmg;
+        showShot(u.x,laneY(u.lane),target.x,laneY(target.lane));
+        u.cooldown=u.attackDelay;
+      }else if(!target && u.cooldown<=0){
+        damageEnemyBase(u.dmg,u.lane,u.x);
+        u.cooldown=u.attackDelay;
+      }
 
-  setTimeout(()=>laser.style.display="none",120);
-}
-function updateEnemyVisual(){
-  const pct = game.enemyMaxHp ? Math.max(0, game.enemyHp/game.enemyMaxHp*100) : 0;
-  document.querySelectorAll(".enemyHp span").forEach(s=>s.style.width=pct+"%");
-}
-function startBattle(){
-  if(game.busy) return;
+      updateUnitEl(u);
+      continue;
+    }
 
-  game.busy=true;
-  $("battleBtn").disabled=true;
+    const closeTarget=findTarget(u,5.5);
 
-  const boss = game.wave % 5 === 0;
-  game.enemyMaxHp = boss ? 450 + game.wave*120 : 220 + game.wave*75;
-  game.enemyHp = game.enemyMaxHp;
-  game.enemyPower = boss ? 140 + game.wave*90 : 90 + game.wave*65;
+    if(closeTarget){
+      if(u.cooldown<=0){
+        closeTarget.hp-=u.dmg;
+        showShot(u.x,laneY(u.lane),closeTarget.x,laneY(closeTarget.lane));
+        u.cooldown=u.attackDelay;
+      }
+      updateUnitEl(u);
+      continue;
+    }
 
-  spawnEnemies();
-  log((boss?"BOSS MUSUH":"Wave musuh")+" muncul! HP "+game.enemyMaxHp+".");
-  toast("Musuh muncul!");
-
-  let tick=0;
-  const fight=setInterval(()=>{
-    tick++;
-    flashLaser();
-
-    const myDamage = Math.max(12, Math.floor(power()/8 + game.drone*3 + game.robot*2));
-    const enemyDamage = Math.max(8, Math.floor(game.enemyPower/18));
-
-    game.enemyHp -= myDamage;
-
-    if(game.shield>0){
-      game.shield = Math.max(0, game.shield - Math.floor(enemyDamage*.7));
+    if(u.side==="ally"){
+      if(u.x>=88){
+        if(u.cooldown<=0){
+          damageEnemyBase(u.dmg,u.lane,u.x);
+          u.cooldown=u.attackDelay;
+        }
+      }else{
+        u.x+=u.speed*dt;
+      }
     }else{
-      if(tick%3===0 && game.robot>0) game.robot--;
-      if(tick%4===0 && game.drone>0) game.drone--;
-      game.energy=Math.max(0,game.energy-enemyDamage);
+      if(u.x<=12){
+        if(u.cooldown<=0){
+          damageAllyBase(u.dmg,u.lane,u.x);
+          u.cooldown=u.attackDelay;
+          u.hp=0;
+        }
+      }else{
+        u.x-=u.speed*dt;
+      }
     }
 
-    updateEnemyVisual();
-    update();
+    updateUnitEl(u);
+  }
 
-    if(game.enemyHp<=0){
-      clearInterval(fight);
-      winBattle(boss);
-    }
-
-    if(tick>=18 && game.enemyHp>0){
-      clearInterval(fight);
-      loseBattle();
-    }
-  },350);
+  removeDead();
+  updateUI();
+  requestAnimationFrame(loop);
 }
-function winBattle(boss){
-  const rEnergy=100+game.wave*30+(boss?300:0);
-  const rAlloy=90+game.wave*25+(boss?250:0);
-  const rChip=6+Math.floor(game.wave/2)+(boss?20:0);
-  const rCredit=90+game.wave*20+(boss?300:0);
 
-  game.energy+=rEnergy;
-  game.alloy+=rAlloy;
-  game.chip+=rChip;
-  game.credit+=rCredit;
-
-  log("Menang wave "+game.wave+"! Hadiah besar diterima.");
-  toast("MENANG!");
-  game.wave++;
-  game.enemyHp=0;
-  game.busy=false;
-  $("battleBtn").disabled=false;
-  clearEnemies();
-  update();
-}
-function loseBattle(){
-  const lostRobot=Math.min(game.robot,Math.ceil(game.wave/2));
-  const lostDrone=Math.min(game.drone,Math.ceil(game.wave/3));
-  game.robot-=lostRobot;
-  game.drone-=lostDrone;
-  game.energy=Math.max(0,game.energy-80);
-
-  log("Kalah! Robot -"+lostRobot+", Drone -"+lostDrone+". Perkuat markas.");
-  toast("KALAH!");
-  game.enemyHp=0;
-  game.busy=false;
-  $("battleBtn").disabled=false;
-  clearEnemies();
-  update();
-}
-function save(show=true){
-  localStorage.setItem(SAVE_KEY,JSON.stringify(game));
+function saveGame(show){
+  const saveData={...game};
+  localStorage.setItem(SAVE_KEY,JSON.stringify(saveData));
   if(show) toast("Game disimpan");
 }
-function load(){
+
+function loadGame(){
   try{
     const d=localStorage.getItem(SAVE_KEY);
     return d?JSON.parse(d):null;
-  }catch(e){return null}
+  }catch(e){
+    return null;
+  }
 }
+
 function resetGame(){
   if(!confirm("Reset game dari awal?")) return;
   localStorage.removeItem(SAVE_KEY);
   location.reload();
 }
-setInterval(()=>{
-  if(!game.busy){
-    game.water += 2 + game.lv.hydro;
-    game.credit += 2 + game.lv.hq;
-    game.energy += 1;
-    update();
-  }
-},2000);
 
-update();
-log("Game siap. Tekan Radar Musuh atau Mulai Wave untuk melihat musuh.");
+setInterval(()=>saveGame(false),5000);
+
+updateUI();
+log("Game siap. Kirim pasukan, tank, dan artileri ke wilayah musuh.");
+requestAnimationFrame(loop);
 </script>
 </body>
 </html>
